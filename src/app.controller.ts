@@ -13,7 +13,7 @@ export class AppController {
 
   @Get()
   hello () {
-    return this.appService.getHello()
+    return this.appService.getHello();
   }
 
   @Post('auth/register')

@@ -8,7 +8,7 @@ import { Role } from '../authorization/role.enum';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Roles(Role.Admin)
+  @Roles(Role.Superadmin)
   @Get('find')
   async find(@Query('email') email): Promise<User> {
     return await this.usersService.findOne(email, false)

@@ -1,0 +1,15 @@
+version: '3'
+services:
+  api:
+    volumes:
+      - volume-sync:/usr/src/app:nocopy
+      - node_modules:/home/node/app/node_modules:ro,delegated
+  mongo:
+    volumes:
+      - volume-sync:/data/db:nocopy
+      - ./.docker/mongodb/mongod.conf:/etc/mongod.conf:ro,delegated
+      - ./.docker/mongodb/initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro,delegated
+
+volumes:
+  volume-sync:
+    external: true
