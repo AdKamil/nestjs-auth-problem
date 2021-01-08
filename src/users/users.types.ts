@@ -6,5 +6,6 @@ export type User = {
   password?: string
   userId?: number,
   username?: string,
+  roles?: string[]
   _doc?: any
 }

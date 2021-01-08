@@ -23,18 +23,30 @@ export class UsersService {
 
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    return this.usersModule.create({ password: hashedPassword, ...userDataWithoutPassword })
+    const createdUser = await this.usersModule.create({ password: hashedPassword, ...userDataWithoutPassword })
+
+    const {
+      _doc: {
+        password: createdUserPassword,
+        ...createdUserWithoutPassword
+      }
+    } = createdUser
+
+    return createdUserWithoutPassword
   }
 
   async findOne(email: string, withPassword = true): Promise<User | undefined> {
-    const user = await this.usersModule.findOne({ email })
+    const user = await this.usersModule.findOne({ email }).exec()
 
     if (!user) throw new NotFoundException('User not found')
 
     if (!withPassword) {
-      const temp = { ...user }
-      const userWithoutPassword = temp._doc
-      delete userWithoutPassword.password
+      const {
+        _doc: {
+          password: userPassword,
+          ...userWithoutPassword
+        }
+      } = user
 
       return userWithoutPassword
     }
