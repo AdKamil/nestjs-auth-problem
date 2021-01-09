@@ -10,12 +10,21 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './authorization/roles.guard';
+import { MulterModule } from '@nestjs/platform-express';
+import { FilesModule } from './files/files.module';
+import { DevelopersService } from './developers/developers.service';
+import { DevelopersModule } from './developers/developers.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(`mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOSTNAME}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`),
     AuthModule,
-    UsersModule
+    UsersModule,
+    FilesModule,
+    DevelopersModule,
+    MulterModule.register({
+      dest: './public/images',
+    })
   ],
   controllers: [AppController],
   providers: [
@@ -23,6 +32,7 @@ import { RolesGuard } from './authorization/roles.guard';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    }],
+    }
+  ],
 })
 export class AppModule {}
