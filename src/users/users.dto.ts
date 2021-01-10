@@ -12,6 +12,9 @@ export class RegisterUserDto {
 
   @ApiProperty()
   password: string
+
+  @ApiProperty()
+  roles: string[]
 }
 
 export class LoginUserDto {
