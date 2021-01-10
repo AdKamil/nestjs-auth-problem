@@ -35,7 +35,7 @@ export class DevelopersService {
     }
 
     if (developer.users.includes(userId)) {
-      return this.developersModule.findByIdAndUpdate(developerData._id, developerData)
+      return this.developersModule.findByIdAndUpdate(developerData._id, developerData, { new: true })
     }
 
     throw new UnauthorizedException()
