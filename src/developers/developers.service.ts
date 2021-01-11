@@ -13,6 +13,10 @@ export class DevelopersService {
     return await this.developersModule.findOne({ _id: id }).exec()
   }
 
+  async findOneByUserId(id): Promise<DeveloperType> {
+    return await this.developersModule.findOne({ users: id }).exec()
+  }
+
   async register(developerData: DeveloperType, userData: UserType): Promise<DeveloperType> {
     const existingDeveloper = await this.developersModule.findOne({ name: developerData.name }).exec()
 

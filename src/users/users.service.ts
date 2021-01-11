@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt'
 @Injectable()
 export class UsersService {
   constructor(@InjectModel('Users') private readonly usersModule: Model<UsersDocument>) {}
+
   async register(userData: UserType): Promise<UserType> {
     const { email } = userData
 

@@ -16,6 +16,7 @@ import { UsersModule } from '../users/users.module';
       }
     ]),
     UsersModule
-  ]
+  ],
+  exports: [DevelopersService]
 })
 export class DevelopersModule {}

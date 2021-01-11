@@ -7,7 +7,7 @@ import { User } from '../users/users.schema';
 export type DevelopersDocument = DeveloperType & Document
 
 @Schema()
-class Developer {
+export class Developer {
   @Prop()
   name: string
 
