@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { UserType } from './users.types'
 import { UsersDocument } from './users.schema'
 import { InjectModel } from '@nestjs/mongoose'
@@ -53,5 +53,38 @@ export class UsersService {
     }
 
     return user
+  }
+
+  async findOneById(userId: string): Promise<UserType | undefined> {
+    const user = await this.usersModule.findOne({ _id: userId }).exec()
+
+    if (!user) throw new NotFoundException('User not found')
+
+    const {
+      _doc: {
+        password: userPassword,
+        ...userWithoutPassword
+      }
+    } = user
+
+    return userWithoutPassword
+  }
+
+  async updateUser(userId: string, userData: UserType): Promise<UserType> {
+
+    try {
+      const updatedUser = await this.usersModule.findByIdAndUpdate(userId, userData)
+
+      const {
+        _doc: {
+          password: userPassword,
+          ...userWithoutPassword
+        }
+      } = updatedUser
+
+      return userWithoutPassword
+    } catch (e) {
+      throw new BadRequestException(e)
+    }
   }
 }

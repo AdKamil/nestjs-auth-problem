@@ -1,4 +1,11 @@
-import { BadRequestException, HttpStatus, Injectable, UnauthorizedException, UploadedFile } from '@nestjs/common';
+import {
+  BadRequestException, ForbiddenException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  UploadedFile
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilesDocument } from './files.schema';
 import { Model } from 'mongoose';
@@ -71,5 +78,24 @@ export class FilesService {
 
       }
     }
+  }
+
+  async findOneByName(name: string): Promise<FileType> {
+    return this.filesModule.findOne({ name })
+  }
+
+  async removeOne(name: string): Promise<{ ok?: number; n?: number; }> {
+    const imageData = await this.findOneByName(name)
+
+    if (imageData) {
+      try {
+        fs.unlinkSync('./public/images/' + name)
+        return await this.filesModule.remove({ name })
+      } catch(err) {
+        throw new ForbiddenException(err)
+      }
+    }
+
+    throw new NotFoundException('Image not found')
   }
 }

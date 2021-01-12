@@ -1,8 +1,8 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   HttpStatus,
-  Post,
+  Post, Query,
   Req,
   UploadedFile,
   UploadedFiles,
@@ -71,10 +71,6 @@ export class FilesController {
       response.push(fileReponse)
     })
 
-    console.log(response)
-
-    // fs.writeFile('loggggggggg.json', JSON.stringify(response, null, 2), err => console.log(err))
-
     await this.filesService.register(response, req.user, givenDeveloperId)
 
     return {
@@ -82,5 +78,12 @@ export class FilesController {
       message: 'Images uploaded successfully!',
       data: response
     }
+  }
+
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  async delete(@Query('name') name: string): Promise<{ ok?: number; n?: number; }> {
+    return await this.filesService.removeOne(name)
   }
 }
