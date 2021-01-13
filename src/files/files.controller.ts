@@ -12,12 +12,15 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { editFileName, filterFileType } from './helpers';
 import { diskStorage } from 'multer';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Roles } from '../authorization/roles.decorator';
+import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { HasRoles } from '../authorization/roles.decorator';
 import { Role } from '../authorization/role.enum';
 import { FilesService } from './files.service';
 import { logToFile } from '../helpers/logToFile';
 import fs from 'fs';
+import { AuthGuard } from '@nestjs/passport';
+import PassportModule from '@nestjs/passport'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('files')
 export class FilesController {
@@ -80,7 +83,7 @@ export class FilesController {
     }
   }
 
-  @Roles(Role.Admin)
+  @HasRoles(Role.Admin)
   @UseGuards(JwtAuthGuard)
   @Delete()
   async delete(@Query('name') name: string): Promise<{ ok?: number; n?: number; }> {

@@ -12,7 +12,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './authorization/roles.guard';
 import { MulterModule } from '@nestjs/platform-express';
 import { FilesModule } from './files/files.module';
-import { DevelopersService } from './developers/developers.service';
 import { DevelopersModule } from './developers/developers.module';
 
 @Module({
@@ -28,11 +27,7 @@ import { DevelopersModule } from './developers/developers.module';
   ],
   controllers: [AppController],
   providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    }
+    AppService
   ],
 })
 export class AppModule {}

@@ -16,7 +16,11 @@ import { RolesGuard } from '../authorization/roles.guard';
     ])
   ],
   providers: [
-    UsersService
+    UsersService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    }
   ],
   exports: [UsersService],
   controllers: [UsersController]

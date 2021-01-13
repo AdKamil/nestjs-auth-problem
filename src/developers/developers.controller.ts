@@ -3,7 +3,9 @@ import { DevelopersService } from './developers.service';
 import { DeveloperType } from './developers.types';
 import { DevelopersDTO } from './developers.dto';
 import * as fs from 'fs';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
+import PassportModule from '@nestjs/passport'
+import { LocalAuthGuard } from '../auth/local-auth.guard';
 
 @Controller('developers')
 export class DevelopersController {
@@ -14,14 +16,14 @@ export class DevelopersController {
     return await this.developersService.findOne(id)
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @Post()
   async register(@Body() developerData: DevelopersDTO, @Request() req): Promise<DeveloperType> {
 
     return await this.developersService.register(developerData, req.user)
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @Patch()
   async update(@Body() developerData: DevelopersDTO, @Request() req): Promise<DeveloperType> {
     return await this.developersService.update(developerData, req.user.userId)

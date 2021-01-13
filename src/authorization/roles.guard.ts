@@ -8,25 +8,24 @@ import { UsersService } from '../users/users.service';
 export class RolesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private userService: UsersService
+    private usersService: UsersService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass()
-    ])
+    const roles = this.reflector.get<Role[]>(ROLES_KEY, context.getHandler())
 
-    if (!requiredRoles) {
+    // @ts-ignore
+    const shouldSkip = this.reflector.getAllAndMerge<boolean>('SHOULD_SKIP_AUTH', [context.getHandler(), context.getClass()])
+
+    if (!roles) {
       return true
     }
 
+
     const { user } = context.switchToHttp().getRequest()
 
-    console.log('email',user)
+    console.log('role guard',user)
 
-    const fullUser = await this.userService.findOne(user.email, false)
-
-    return requiredRoles.some((role) => fullUser.roles?.includes(role))
+    return /*roles.some((role) => user?.roles?.includes(role))*/ true
   }
 }

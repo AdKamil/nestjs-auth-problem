@@ -37,6 +37,23 @@ export class UpdateUserDto {
   developer: string
 }
 
+export class ValidateUserDto {
+  @ApiProperty()
+  _id: string
+
+  @ApiProperty()
+  firstname: string
+
+  @ApiProperty()
+  lastname: string
+
+  @ApiProperty()
+  roles: string[]
+
+  @ApiProperty()
+  developer: string
+}
+
 export class LoginUserDto {
   @ApiProperty()
   email: string
